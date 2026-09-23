@@ -1,0 +1,380 @@
+{
+  "ae2_uvl_marker": true,
+  "textures": {
+    "particle": "beamformers:blocks/beam_tower",
+    "body": "beamformers:blocks/beam_tower",
+    "glow": "beamformers:blocks/beam_tower_glow"
+  },
+  "elements": [
+    {
+      "from": [4, 4, 15],
+      "to": [12, 12, 16],
+      "faces": {
+        "north": {
+          "uv": [0, 0, 2, 2],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [6.25, 5.5, 6.5, 7.5],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [0, 2, 2, 4],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [0, 6.5, 0.25, 8.5],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [8.5, 0.25, 6.5, 0],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [8.5, 0.25, 6.5, 0.5],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [5, 5, 14],
+      "to": [11, 11, 15],
+      "faces": {
+        "north": {
+          "uv": [0, 4, 1.5, 5.5],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [0.75, 6.5, 1, 8],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [4, 0, 5.5, 1.5],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [1, 6.5, 1.25, 8],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [8, 1.25, 6.5, 1],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [8, 1.25, 6.5, 1.5],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [5, 5, 6],
+      "to": [11, 11, 7],
+      "faces": {
+        "north": {
+          "uv": [1.5, 4, 3, 5.5],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [1.25, 6.5, 1.5, 8],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [4, 1.5, 5.5, 3],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [2.5, 6.5, 2.75, 8],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [8, 1.75, 6.5, 1.5],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [8, 1.75, 6.5, 2],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [6, 6, 8],
+      "to": [10, 10, 14],
+      "faces": {
+        "north": {
+          "uv": [3.5, 5.5, 4.5, 6.5],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [4.5, 4.5, 6, 5.5],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [4.5, 5.5, 5.5, 6.5],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [0, 5.5, 1.5, 6.5],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [6.5, 1.5, 5.5, 0],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [2.5, 5.5, 1.5, 7],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [4, 4, 4],
+      "to": [12, 12, 5],
+      "faces": {
+        "north": {
+          "uv": [2, 0, 4, 2],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [0.25, 6.5, 0.5, 8.5],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [2, 2, 4, 4],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [0.5, 6.5, 0.75, 8.5],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [8.5, 0.75, 6.5, 0.5],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [8.5, 0.75, 6.5, 1],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [6.5, 6.25, 2],
+      "to": [9.5, 9.25, 5],
+      "faces": {
+        "north": {
+          "uv": [5.5, 5.5, 6.25, 6.25],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [6, 2.5, 6.75, 3.25],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [6, 3.25, 6.75, 4],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [6, 4, 6.75, 4.75],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [6.75, 5.5, 6, 4.75],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [6.25, 6.25, 5.5, 7],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [11, 5, 4],
+      "to": [5, 11, 5],
+      "faces": {
+        "north": {
+          "uv": [4.5, 3, 6, 4.5],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [2.75, 6.5, 3, 8],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [3, 4, 4.5, 5.5],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [3, 6.5, 3.25, 8],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [6.5, 2.25, 8, 2],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [6.5, 2.25, 8, 2.5],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [10, 6, 6],
+      "to": [6, 10, 7],
+      "faces": {
+        "north": {
+          "uv": [5.5, 1.5, 6.5, 2.5],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [4, 3, 4.25, 4],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [2.5, 5.5, 3.5, 6.5],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [4.25, 3, 4.5, 4],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [3.25, 6.75, 4.25, 6.5],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [4.25, 6.5, 5.25, 6.75],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [9.75, 9.5, 5.25],
+      "to": [6.25, 6, 1.75],
+      "faces": {
+        "north": {
+          "uv": [8.5, 0.25, 8.75, 0],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [8.5, 0.25, 8.75, 0],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [8.5, 0.25, 8.75, 0],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [8.5, 0.25, 8.75, 0],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [8.5, 0.25, 8.75, 0],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [8.5, 0.25, 8.75, 0],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [6, 6, 8],
+      "to": [10, 10, 14],
+      "faces": {
+        "north": {
+          "uv": [3.5, 5.5, 4.5, 6.5],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        },
+        "east": {
+          "uv": [4.5, 4.5, 6, 5.5],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        },
+        "west": {
+          "uv": [0, 5.5, 1.5, 6.5],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        },
+        "up": {
+          "uv": [6.5, 1.5, 5.5, 0],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        },
+        "down": {
+          "uv": [2.5, 5.5, 1.5, 7],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        }
+      }
+    },
+    {
+      "from": [6.5, 6.25, 2],
+      "to": [9.5, 9.25, 5],
+      "faces": {
+        "north": {
+          "uv": [5.5, 5.5, 6.25, 6.25],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        },
+        "east": {
+          "uv": [6, 2.5, 6.75, 3.25],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        },
+        "south": {
+          "uv": [6, 3.25, 6.75, 4],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        },
+        "west": {
+          "uv": [6, 4, 6.75, 4.75],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        },
+        "up": {
+          "uv": [6.75, 5.5, 6, 4.75],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        },
+        "down": {
+          "uv": [6.25, 6.25, 5.5, 7],
+          "texture": "#glow",
+          "uvlightmap": {
+            "block": 15,
+            "sky": 15
+          }
+        }
+      }
+    }
+  ]
+}
