@@ -23,3 +23,8 @@ All notable ME Beam Formers changes are grouped by the version in which they fir
   receiver, quartz glass, a calculation processor and a fluix glass cable.
   The idea comes from [ME Beam Former](https://modrinth.com/mod/me-beam-former) and the beam former of
   [NAE2](https://github.com/AE2-UEL/NAE2).
+- **Beams glow.** With [GregTech CEu](https://github.com/GregTechCEu/GregTech) or
+  [Lumenized](https://www.curseforge.com/minecraft/mc-mods/lumenized), which carries GregTech's bloom on its
+  own, installed, the beams are drawn through that bloom and shine around their edges. Under an OptiFine shader
+  pack, where that bloom is switched off, and without either mod, they are drawn as before. Drawing beams
+  through GregTech's bloom follows [NAE2](https://github.com/AE2-UEL/NAE2).
