@@ -21,7 +21,7 @@ def rnd(v):
     return int(v) if v == int(v) else v
 
 
-def convert(bb, png, kind, name, xform):
+def convert(bb, png, kind, name, xform, model_path=None, parent=None):
     d = json.load(open(SRC + bb, encoding='utf-8'))
     res = d['resolution']['width']
     assert d['resolution']['height'] == res
@@ -71,6 +71,7 @@ def convert(bb, png, kind, name, xform):
 
     model = {
         'ae2_uvl_marker': True,
+        **({'parent': parent} if parent else {}),
         'textures': {
             'particle': f'beamformers:{folder}/{name}',
             'body': f'beamformers:{folder}/{name}',
@@ -78,12 +79,13 @@ def convert(bb, png, kind, name, xform):
         },
         'elements': base + lit,
     }
-    os.makedirs(REPO + 'models/' + kind, exist_ok=True)
-    with open(REPO + f'models/{kind}/{name}.json', 'w', encoding='utf-8', newline='\n') as fp:
+    model_path = model_path or f'{kind}/{name}'
+    os.makedirs(os.path.dirname(REPO + f'models/{model_path}'), exist_ok=True)
+    with open(REPO + f'models/{model_path}.json', 'w', encoding='utf-8', newline='\n') as fp:
         text = json.dumps(model, indent=2)
         text = re.sub(r'\[\s*([-\d.,\s]+?)\s*\]', lambda m: '[' + ', '.join(re.split(r'[,\s]+', m.group(1).strip())) + ']', text)
         fp.write(text + '\n')
-    print(name, len(base), 'elements,', len(lit), 'glowing')
+    print(model_path, len(base), 'elements,', len(lit), 'glowing')
 
 
 def bounds(bb):
@@ -99,6 +101,11 @@ cx, cy = (lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2
 S = 0.7
 convert('small_beam_former.bbmodel', 'small_beam_former.png', 'part', 'small_beam_former',
         lambda p: [8 + (p[0] - cx) * S, 8 + (p[1] - cy) * S, 6 + (p[2] - hi[2]) * S])
+# the item shows the same part moved to the middle of the block, under AE2's part display transforms
+depth = (hi[2] - lo[2]) * S
+convert('small_beam_former.bbmodel', 'small_beam_former.png', 'part', 'small_beam_former',
+        lambda p: [8 + (p[0] - cx) * S, 8 + (p[1] - cy) * S, 8 + depth / 2 + (p[2] - hi[2]) * S],
+        model_path='item/small_beam_former', parent='appliedenergistics2:item/part/part')
 
 for bb, png, name in [('dense_beam_former.bbmodel', 'dense_beam_former.png', 'dense_beam_former'),
                       ('beam_tower.bbmodel', 'beam_tower.png', 'beam_tower')]:
