@@ -3,27 +3,27 @@ package com.beamformers.former;
 import java.util.HashSet;
 import java.util.Set;
 
-/** The beams a client draws: the owning end of every joined, powered pair it was told about. */
+/** The client's sources of beams to draw. */
 public final class BeamRegistry {
 
-    private static final Set<BeamEnd> DRAWN = new HashSet<>();
+    private static final Set<IBeamSource> DRAWN = new HashSet<>();
 
     private BeamRegistry() {}
 
-    static void update(BeamEnd end) {
-        if (end.getClientLength() > 0 && !end.isHidden()) {
-            DRAWN.add(end);
+    public static void update(IBeamSource source, boolean drawn) {
+        if (drawn) {
+            DRAWN.add(source);
         } else {
-            DRAWN.remove(end);
+            DRAWN.remove(source);
         }
     }
 
-    static void remove(BeamEnd end) {
-        DRAWN.remove(end);
+    public static void remove(IBeamSource source) {
+        DRAWN.remove(source);
     }
 
     /** The renderer drops from this whatever it finds is no longer in the world. */
-    public static Set<BeamEnd> drawn() {
+    public static Set<IBeamSource> drawn() {
         return DRAWN;
     }
 

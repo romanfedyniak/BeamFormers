@@ -12,14 +12,17 @@ import appeng.core.features.ActivityState;
 import appeng.core.features.BlockStackSrc;
 import appeng.tile.AEBaseTile;
 
-import com.beamformers.block.BlockDenseBeamFormer;
+import com.beamformers.block.BlockBeamTower;
+import com.beamformers.block.BlockMounted;
+import com.beamformers.tile.TileBeamTower;
 import com.beamformers.tile.TileDenseBeamFormer;
 
 public final class BeamFormersBlocks {
 
     public static final List<Block> BLOCKS = new ArrayList<>();
 
-    public static final BlockDenseBeamFormer DENSE_BEAM_FORMER = add(new BlockDenseBeamFormer(), "dense_beam_former");
+    public static final BlockMounted DENSE_BEAM_FORMER = add(new BlockMounted(TileDenseBeamFormer.class), "dense_beam_former");
+    public static final BlockBeamTower BEAM_TOWER = add(new BlockBeamTower(), "beam_tower");
 
     private BeamFormersBlocks() {}
 
@@ -34,6 +37,7 @@ public final class BeamFormersBlocks {
     /** Called while blocks are registered. */
     public static void registerTiles() {
         registerTile(TileDenseBeamFormer.class, DENSE_BEAM_FORMER, "dense_beam_former");
+        registerTile(TileBeamTower.class, BEAM_TOWER, "beam_tower");
     }
 
     private static void registerTile(Class<? extends TileEntity> tile, AEBaseTileBlock block, String name) {

@@ -1,6 +1,7 @@
 package com.beamformers.former;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -12,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import appeng.api.AEApi;
@@ -29,7 +31,10 @@ import com.beamformers.BeamFormersConfig;
  * One end of a beam, and the pairing both kinds of former share. Of a joined pair, the end that made the
  * connection owns it: it measures the beam and the client draws it from there.
  */
-public final class BeamEnd {
+public final class BeamEnd implements IBeamSource, PathWatcher.Watcher {
+
+    /** How far each end of a beam reaches into its former, so no gap shows at the tip. */
+    private static final double SUNK = 1 / 32d;
 
     private final IBeamFormer former;
 
@@ -97,7 +102,8 @@ public final class BeamEnd {
                 break;
             }
         }
-        PathWatcher.INSTANCE.watch(this, world, watched, this.former.getColorSource(), unloaded);
+        PathWatcher.INSTANCE.watch(this, world, watched, this.former.getColorSource(),
+                unloaded == null ? Collections.emptyList() : Collections.singletonList(unloaded));
 
         final IGridNode otherNode = found == null ? null : found.former.getFormerNode();
         if (otherNode == null || found.partner != null && found.partner != this
@@ -211,16 +217,32 @@ public final class BeamEnd {
         this.hidden = data.readBoolean();
         this.clientLength = data.readFloat();
         this.clientColor = AEColor.values()[data.readByte()];
-        BeamRegistry.update(this);
+        BeamRegistry.update(this, this.clientLength > 0 && !this.hidden);
         return wasHidden != this.hidden || oldLength != this.clientLength || oldColor != this.clientColor;
     }
 
-    public float getClientLength() {
-        return this.clientLength;
+    @Override
+    public void wake() {
+        this.former.wake();
     }
 
-    public AEColor getClientColor() {
-        return this.clientColor;
+    @Override
+    public World getSourceWorld() {
+        return this.former.getFormerWorld();
+    }
+
+    @Override
+    public boolean isSourceInWorld() {
+        return this.former.isFormerInWorld();
+    }
+
+    @Override
+    public void addBeams(List<Beam> out) {
+        final Vec3d dir = new Vec3d(this.former.getFacing().getDirectionVec());
+        final Vec3d start = new Vec3d(this.former.getFormerPos()).add(0.5, 0.5, 0.5)
+                .add(dir.scale(this.former.getTipOffset() - SUNK));
+        out.add(new Beam(start, start.add(dir.scale(this.clientLength + 2 * SUNK)), this.former.getBeamRadius(),
+                this.former.getGlowRadius(), this.clientColor, SUNK));
     }
 
     public void writeToNBT(NBTTagCompound data) {
@@ -249,10 +271,10 @@ public final class BeamEnd {
         return null;
     }
 
-    /** A beam goes through whatever light goes through, but never through a cable bus or another former. */
-    static boolean blocks(World world, BlockPos pos) {
+    /** A beam goes through whatever light goes through, but never through a cable bus, a former or a tower. */
+    public static boolean blocks(World world, BlockPos pos) {
         final TileEntity te = world.getTileEntity(pos);
-        if (te instanceof IPartHost || te instanceof IBeamFormer) {
+        if (te instanceof IPartHost || te instanceof IBeamFormer || te instanceof IBeamSource) {
             return true;
         }
         final IBlockState state = world.getBlockState(pos);

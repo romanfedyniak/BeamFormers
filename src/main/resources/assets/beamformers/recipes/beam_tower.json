@@ -1,0 +1,53 @@
+{
+    "conditions": [
+        {
+            "type": "forge:and",
+            "values": [
+                {
+                    "type": "appliedenergistics2:material_exists",
+                    "material": "material.wireless_booster"
+                },
+                {
+                    "type": "appliedenergistics2:material_exists",
+                    "material": "material.logic_processor"
+                },
+                {
+                    "type": "minecraft:item_exists",
+                    "item": "appliedenergistics2:quartz_glass"
+                },
+                {
+                    "type": "minecraft:item_exists",
+                    "item": "appliedenergistics2:fluix_block"
+                }
+            ]
+        }
+    ],
+    "result": {
+        "item": "beamformers:beam_tower"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "wlw",
+        "gxg",
+        "qqq"
+    ],
+    "key": {
+        "w": {
+            "type": "appliedenergistics2:part",
+            "part": "material.wireless_booster"
+        },
+        "l": {
+            "type": "appliedenergistics2:part",
+            "part": "material.logic_processor"
+        },
+        "g": {
+            "item": "appliedenergistics2:quartz_glass"
+        },
+        "x": {
+            "item": "beamformers:dense_beam_former"
+        },
+        "q": {
+            "item": "appliedenergistics2:fluix_block"
+        }
+    }
+}

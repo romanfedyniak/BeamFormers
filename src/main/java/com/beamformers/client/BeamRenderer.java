@@ -1,6 +1,8 @@
 package com.beamformers.client;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.lwjgl.opengl.GL11;
@@ -13,9 +15,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -23,9 +23,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import appeng.api.util.AEColor;
 
-import com.beamformers.former.BeamEnd;
+import com.beamformers.former.Beam;
 import com.beamformers.former.BeamRegistry;
-import com.beamformers.former.IBeamFormer;
+import com.beamformers.former.IBeamSource;
 
 /**
  * Draws every beam once a frame: through GTCEu's bloom when it is there and drew them, otherwise after the
@@ -35,8 +35,8 @@ public final class BeamRenderer {
 
     public static final BeamRenderer INSTANCE = new BeamRenderer();
 
-    /** How far each end of a beam reaches into its former, so no gap shows at the tip. */
-    private static final double SUNK = 1 / 32d;
+    private static final Vec3d UP = new Vec3d(0, 1, 0);
+    private static final Vec3d EAST = new Vec3d(1, 0, 0);
 
     /** Light can only brighten what is behind it, so a black beam is drawn as a dark shade instead, never bloomed. */
     static final Predicate<AEColor> BLOOMED = color -> color != AEColor.BLACK;
@@ -117,66 +117,54 @@ public final class BeamRenderer {
         final Minecraft mc = Minecraft.getMinecraft();
         final Frustum frustum = new Frustum();
         frustum.setPosition(cx, cy, cz);
-        for (Iterator<BeamEnd> it = BeamRegistry.drawn().iterator(); it.hasNext(); ) {
-            final BeamEnd end = it.next();
-            final IBeamFormer former = end.getFormer();
-            if (former.getFormerWorld() != mc.world || !former.isFormerInWorld()) {
+        final Vec3d camera = new Vec3d(cx, cy, cz);
+        final List<Beam> beams = new ArrayList<>();
+        for (Iterator<IBeamSource> it = BeamRegistry.drawn().iterator(); it.hasNext(); ) {
+            final IBeamSource source = it.next();
+            if (source.getSourceWorld() != mc.world || !source.isSourceInWorld()) {
                 it.remove();
                 continue;
             }
-            final AEColor color = end.getClientColor();
-            if (!which.test(color)) {
+            source.addBeams(beams);
+        }
+        for (Beam beam : beams) {
+            if (!which.test(beam.color)
+                    || !frustum.isBoundingBoxInFrustum(new AxisAlignedBB(beam.start, beam.end).grow(beam.glowRadius))) {
                 continue;
             }
-            final AxisAlignedBB core = beamBox(former, end.getClientLength(), former.getBeamRadius());
-            if (!frustum.isBoundingBoxInFrustum(core.grow(0.5))) {
-                continue;
-            }
-            final EnumFacing.Axis axis = former.getFacing().getAxis();
-            final boolean dark = !BLOOMED.test(color);
-            sides(buffer, core.offset(-cx, -cy, -cz), axis, dark ? color.mediumVariant : color.whiteVariant, 0.9f);
-            sides(buffer, beamBox(former, end.getClientLength(), former.getGlowRadius()).offset(-cx, -cy, -cz),
-                    axis, dark ? color.blackVariant : color.mediumVariant, 0.3f);
+            final Vec3d start = beam.start.subtract(camera);
+            final Vec3d end = beam.end.subtract(camera);
+            final boolean dark = !BLOOMED.test(beam.color);
+            sides(buffer, start, end, beam.radius, dark ? beam.color.mediumVariant : beam.color.whiteVariant, 0.9f);
+            final Vec3d inset = end.subtract(start).normalize().scale(beam.sunk);
+            sides(buffer, start.add(inset), end.subtract(inset), beam.glowRadius,
+                    dark ? beam.color.blackVariant : beam.color.mediumVariant, 0.3f);
         }
     }
 
-    private static AxisAlignedBB beamBox(IBeamFormer former, float length, float radius) {
-        final BlockPos pos = former.getFormerPos();
-        final EnumFacing facing = former.getFacing();
-        final Vec3d dir = new Vec3d(facing.getDirectionVec());
-        final Vec3d start = new Vec3d(pos).add(0.5, 0.5, 0.5).add(dir.scale(former.getTipOffset() - SUNK));
-        final Vec3d end = start.add(dir.scale(length + 2 * SUNK));
-        final double rx = facing.getAxis() == EnumFacing.Axis.X ? 0 : radius;
-        final double ry = facing.getAxis() == EnumFacing.Axis.Y ? 0 : radius;
-        final double rz = facing.getAxis() == EnumFacing.Axis.Z ? 0 : radius;
-        return new AxisAlignedBB(start, end).grow(rx, ry, rz);
-    }
-
     /** The four long sides only: an end cap would lie in the plane of the emitter's tip and flicker against it. */
-    private static void sides(BufferBuilder b, AxisAlignedBB bb, EnumFacing.Axis axis, int rgb, float alpha) {
+    private static void sides(BufferBuilder b, Vec3d start, Vec3d end, float radius, int rgb, float alpha) {
+        final Vec3d dir = end.subtract(start).normalize();
+        final Vec3d across = dir.crossProduct(Math.abs(dir.y) < 0.99 ? UP : EAST).normalize();
+        final Vec3d u = across.scale(radius);
+        final Vec3d v = dir.crossProduct(across).scale(radius);
+        final Vec3d[] corners = { u.add(v), u.subtract(v), u.scale(-1).subtract(v), v.subtract(u) };
         final int r = rgb >> 16 & 0xFF;
         final int g = rgb >> 8 & 0xFF;
         final int bl = rgb & 0xFF;
         final int a = (int) (alpha * 255);
-        final double x0 = bb.minX, y0 = bb.minY, z0 = bb.minZ, x1 = bb.maxX, y1 = bb.maxY, z1 = bb.maxZ;
-        if (axis != EnumFacing.Axis.Z) {
-            quad(b, r, g, bl, a, x0, y0, z0, x1, y0, z0, x1, y1, z0, x0, y1, z0);
-            quad(b, r, g, bl, a, x0, y0, z1, x0, y1, z1, x1, y1, z1, x1, y0, z1);
-        }
-        if (axis != EnumFacing.Axis.X) {
-            quad(b, r, g, bl, a, x0, y0, z0, x0, y1, z0, x0, y1, z1, x0, y0, z1);
-            quad(b, r, g, bl, a, x1, y0, z0, x1, y0, z1, x1, y1, z1, x1, y1, z0);
-        }
-        if (axis != EnumFacing.Axis.Y) {
-            quad(b, r, g, bl, a, x0, y0, z0, x0, y0, z1, x1, y0, z1, x1, y0, z0);
-            quad(b, r, g, bl, a, x0, y1, z0, x1, y1, z0, x1, y1, z1, x0, y1, z1);
+        for (int i = 0; i < 4; i++) {
+            final Vec3d c0 = corners[i];
+            final Vec3d c1 = corners[(i + 1) % 4];
+            vertex(b, start.add(c0), r, g, bl, a);
+            vertex(b, end.add(c0), r, g, bl, a);
+            vertex(b, end.add(c1), r, g, bl, a);
+            vertex(b, start.add(c1), r, g, bl, a);
         }
     }
 
-    private static void quad(BufferBuilder b, int r, int g, int bl, int a, double... p) {
-        for (int i = 0; i < 12; i += 3) {
-            b.pos(p[i], p[i + 1], p[i + 2]).color(r, g, bl, a).endVertex();
-        }
+    private static void vertex(BufferBuilder b, Vec3d p, int r, int g, int bl, int a) {
+        b.pos(p.x, p.y, p.z).color(r, g, bl, a).endVertex();
     }
 
 }

@@ -18,13 +18,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import appeng.block.AEBaseTileBlock;
 import appeng.util.Platform;
 
-import com.beamformers.tile.TileDenseBeamFormer;
+import com.beamformers.tile.TileMounted;
 
-public class BlockDenseBeamFormer extends AEBaseTileBlock {
+/** A block for a {@link TileMounted}; sneaking with an empty hand hides or shows its beams. */
+public class BlockMounted extends AEBaseTileBlock {
 
-    public BlockDenseBeamFormer() {
+    public BlockMounted(Class<? extends TileMounted> tile) {
         super(Material.IRON);
-        this.setTileEntity(TileDenseBeamFormer.class);
+        this.setTileEntity(tile);
         this.setLightOpacity(0);
         this.setFullSize(false);
         this.setOpaque(false);
@@ -48,7 +49,7 @@ public class BlockDenseBeamFormer extends AEBaseTileBlock {
         if (!player.isSneaking() || heldItem != null && !heldItem.isEmpty()) {
             return false;
         }
-        final TileDenseBeamFormer tile = this.getTileEntity(world, pos);
+        final TileMounted tile = this.getTileEntity(world, pos);
         if (tile == null) {
             return false;
         }

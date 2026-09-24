@@ -35,3 +35,11 @@ All notable ME Beam Formers changes are grouped by the version in which they fir
   colour is that of the cable bus behind its base, and its beam is thicker. A wrench turns it. It is
   made from quartz glass, an engineering processor, two Small Beam Formers, a fluix dense cable and a fluix
   block. The dense beam former as a block of its own follows [NAE2](https://github.com/AE2-UEL/NAE2).
+- **The Beam Tower.** A block that mounts like the Dense Beam Former and links to other towers, at any angle,
+  up to 32 blocks apart (`towerRange` in the config) and to at most 8 of them (`towerMaxLinks`). Links are made
+  with AE2's memory card: sneak and use it on one tower to store it, then use it on another to link the two, or
+  to unlink them if they already are. Each link carries 32 channels while nothing stands between the two
+  crystals, by the same rule as a beam former's beam, and costs 0.5 AE/t on each tower. The towers take their
+  colour like the Dense Beam Former, sneaking with an empty hand hides or shows all of a tower's beams, and
+  links survive the towers being unloaded. It is made from wireless boosters, a logic processor, quartz glass,
+  a Dense Beam Former and fluix blocks. The idea comes from [ME Beam Former](https://modrinth.com/mod/me-beam-former).
