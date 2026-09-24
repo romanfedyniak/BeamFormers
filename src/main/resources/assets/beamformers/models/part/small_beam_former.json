@@ -334,8 +334,8 @@
           "uv": [4, 0, 8, 4],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         }
       }

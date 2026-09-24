@@ -494,48 +494,48 @@
           "uv": [3, 7, 3.75, 7.75],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "east": {
           "uv": [3.75, 7, 4.5, 7.75],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "south": {
           "uv": [7, 6.5, 7.75, 7.25],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "west": {
           "uv": [7, 7.25, 7.75, 8],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "up": {
           "uv": [8.25, 1.25, 7.5, 0.5],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "down": {
           "uv": [8.25, 1.25, 7.5, 2],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         }
       }

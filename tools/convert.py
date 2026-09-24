@@ -64,7 +64,7 @@ def convert(bb, png, kind, name, xform, model_path=None, parent=None):
             uv = [rnd(u * 16 / res) for u in fc['uv']]
             faces[side] = {'uv': uv, 'texture': '#body'}
             if has_pink(fc['uv']):
-                glows[side] = {'uv': uv, 'texture': '#glow', 'uvlightmap': {'block': 15, 'sky': 15}}
+                glows[side] = {'uv': uv, 'texture': '#glow', 'uvlightmap': {'block': 0.007, 'sky': 0.007}}
         base.append(dict(out, faces=faces))
         if glows:
             lit.append(dict(out, faces=glows))

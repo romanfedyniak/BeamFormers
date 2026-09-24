@@ -284,40 +284,40 @@
           "uv": [3.5, 5.5, 4.5, 6.5],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "east": {
           "uv": [4.5, 4.5, 6, 5.5],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "west": {
           "uv": [0, 5.5, 1.5, 6.5],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "up": {
           "uv": [6.5, 1.5, 5.5, 0],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "down": {
           "uv": [2.5, 5.5, 1.5, 7],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         }
       }
@@ -330,48 +330,48 @@
           "uv": [5.5, 5.5, 6.25, 6.25],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "east": {
           "uv": [6, 2.5, 6.75, 3.25],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "south": {
           "uv": [6, 3.25, 6.75, 4],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "west": {
           "uv": [6, 4, 6.75, 4.75],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "up": {
           "uv": [6.75, 5.5, 6, 4.75],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         },
         "down": {
           "uv": [6.25, 6.25, 5.5, 7],
           "texture": "#glow",
           "uvlightmap": {
-            "block": 15,
-            "sky": 15
+            "block": 0.007,
+            "sky": 0.007
           }
         }
       }
