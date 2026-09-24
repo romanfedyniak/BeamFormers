@@ -1,0 +1,53 @@
+{
+    "conditions": [
+        {
+            "type": "forge:and",
+            "values": [
+                {
+                    "type": "appliedenergistics2:material_exists",
+                    "material": "material.engineering_processor"
+                },
+                {
+                    "type": "appliedenergistics2:part_exists",
+                    "part": "cable_dense_covered.fluix"
+                },
+                {
+                    "type": "minecraft:item_exists",
+                    "item": "appliedenergistics2:quartz_glass"
+                },
+                {
+                    "type": "minecraft:item_exists",
+                    "item": "appliedenergistics2:fluix_block"
+                }
+            ]
+        }
+    ],
+    "result": {
+        "item": "beamformers:dense_beam_former"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "geg",
+        "bdb",
+        "gqg"
+    ],
+    "key": {
+        "g": {
+            "item": "appliedenergistics2:quartz_glass"
+        },
+        "e": {
+            "type": "appliedenergistics2:part",
+            "part": "material.engineering_processor"
+        },
+        "b": {
+            "item": "beamformers:small_beam_former"
+        },
+        "d": {
+            "type": "appliedenergistics2:part",
+            "part": "cable_dense_covered.fluix"
+        },
+        "q": {
+            "item": "appliedenergistics2:fluix_block"
+        }
+    }
+}

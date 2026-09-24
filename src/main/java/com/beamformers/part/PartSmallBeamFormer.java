@@ -181,6 +181,11 @@ public class PartSmallBeamFormer extends PartBasicState implements IGridTickable
     }
 
     @Override
+    public float getGlowRadius() {
+        return 5 / 64f;
+    }
+
+    @Override
     public boolean isFormerInWorld() {
         return this.getTile() != null && !this.getTile().isInvalid() && this.getHost() != null
                 && this.getHost().getPart(this.getSide()) == this;

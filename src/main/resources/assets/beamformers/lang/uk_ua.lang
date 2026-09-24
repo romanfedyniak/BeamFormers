@@ -2,3 +2,4 @@ itemGroup.beamformers=ME Beam Formers
 item.beamformers.small_beam_former.name=МЕ малий формувач променя
 chat.beamformers.beam_hidden=Промінь сховано
 chat.beamformers.beam_shown=Промінь показано
+tile.beamformers.dense_beam_former.name=МЕ щільний формувач променя

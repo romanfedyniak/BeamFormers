@@ -2,3 +2,4 @@ itemGroup.beamformers=ME Beam Formers
 item.beamformers.small_beam_former.name=ME Small Beam Former
 chat.beamformers.beam_hidden=Beam hidden
 chat.beamformers.beam_shown=Beam shown
+tile.beamformers.dense_beam_former.name=ME Dense Beam Former

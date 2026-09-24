@@ -28,3 +28,9 @@ All notable ME Beam Formers changes are grouped by the version in which they fir
   own, installed, the beams are drawn through that bloom and shine around their edges. Under an OptiFine shader
   pack, where that bloom is switched off, and without either mod, they are drawn as before. Drawing beams
   through GregTech's bloom follows [NAE2](https://github.com/AE2-UEL/NAE2).
+- **The Dense Beam Former.** A block that mounts on whatever it is placed against, with the beam pointing away
+  from it, and joins the network only through that base. Two of them link at 32 channels; with a Small Beam
+  Former at the other end the link carries 8. It pairs, colours, hides and draws power like the small one; its
+  colour is that of the cable bus behind its base, and its beam is thicker. A wrench turns it. It is
+  made from quartz glass, an engineering processor, two Small Beam Formers, a fluix dense cable and a fluix
+  block. The dense beam former as a block of its own follows [NAE2](https://github.com/AE2-UEL/NAE2).

@@ -37,6 +37,9 @@ public interface IBeamFormer {
     /** Half the width of the beam's bright core, in blocks. */
     float getBeamRadius();
 
+    /** Half the width of the faint glow around the core, in blocks. */
+    float getGlowRadius();
+
     /** Client side: whether this former is still the one in the world, so its beam may be drawn. */
     boolean isFormerInWorld();
 

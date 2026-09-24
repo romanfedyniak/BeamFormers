@@ -243,12 +243,16 @@ public final class BeamEnd {
                 return ((IBeamFormer) part).getBeamEnd();
             }
         }
+        if (te instanceof IBeamFormer && ((IBeamFormer) te).getFacing() == side) {
+            return ((IBeamFormer) te).getBeamEnd();
+        }
         return null;
     }
 
-    /** A beam goes through whatever light goes through, but never through a cable bus. */
+    /** A beam goes through whatever light goes through, but never through a cable bus or another former. */
     static boolean blocks(World world, BlockPos pos) {
-        if (world.getTileEntity(pos) instanceof IPartHost) {
+        final TileEntity te = world.getTileEntity(pos);
+        if (te instanceof IPartHost || te instanceof IBeamFormer) {
             return true;
         }
         final IBlockState state = world.getBlockState(pos);

@@ -118,7 +118,7 @@ public final class BeamRenderer {
             final AEColor color = end.getClientColor();
             final EnumFacing.Axis axis = former.getFacing().getAxis();
             sides(buffer, core.offset(-cx, -cy, -cz), axis, color.whiteVariant, 0.9f);
-            sides(buffer, beamBox(former, end.getClientLength(), former.getBeamRadius() * 2.5f).offset(-cx, -cy, -cz),
+            sides(buffer, beamBox(former, end.getClientLength(), former.getGlowRadius()).offset(-cx, -cy, -cz),
                     axis, color.mediumVariant, 0.3f);
         }
     }

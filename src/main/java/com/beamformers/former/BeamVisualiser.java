@@ -15,7 +15,7 @@ import appeng.api.util.DimensionalCoord;
 
 /**
  * Draws a beam in AE2's network visualiser. A part's node has no place in the world of its own, so the
- * visualiser leaves out whatever joins two parts; the beam is hung off the cable its former sits on instead.
+ * visualiser leaves out whatever joins a part; such a beam is hung off the cable its former sits on instead.
  */
 public final class BeamVisualiser implements INetworkVisualiserProvider {
 
@@ -26,22 +26,25 @@ public final class BeamVisualiser implements INetworkVisualiserProvider {
             return;
         }
         final TileEntity te = location.getWorld().getTileEntity(location.getPos());
-        if (!(te instanceof IPartHost)) {
-            return;
-        }
-        final IPartHost host = (IPartHost) te;
-        for (EnumFacing side : EnumFacing.values()) {
-            final IPart part = host.getPart(side);
-            if (part instanceof IBeamFormer) {
-                link(((IBeamFormer) part).getBeamEnd(), sink);
+        if (te instanceof IBeamFormer) {
+            link(((IBeamFormer) te).getBeamEnd(), sink);
+        } else if (te instanceof IPartHost) {
+            final IPartHost host = (IPartHost) te;
+            for (EnumFacing side : EnumFacing.values()) {
+                final IPart part = host.getPart(side);
+                if (part instanceof IBeamFormer) {
+                    link(((IBeamFormer) part).getBeamEnd(), sink);
+                }
             }
         }
     }
 
+    /** Two blocks are joined node to node, which the visualiser draws already. */
     private static void link(BeamEnd end, IVisualiserSink sink) {
         final BeamEnd partner = end.getPartner();
         final IGridConnection connection = end.getConnection();
-        if (!end.isOwner() || partner == null || connection == null) {
+        if (!end.isOwner() || partner == null || connection == null
+                || end.getFormer() instanceof TileEntity && partner.getFormer() instanceof TileEntity) {
             return;
         }
         final int capacity = Math.min(capacityOf(end), capacityOf(partner));
