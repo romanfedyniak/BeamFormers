@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import appeng.block.AEBaseTileBlock;
 import appeng.util.Platform;
 
+import com.beamformers.client.GlowLayer;
 import com.beamformers.tile.TileMounted;
 
 /** A block for a {@link TileMounted}; sneaking with an empty hand hides or shows its beams. */
@@ -41,6 +42,11 @@ public class BlockMounted extends AEBaseTileBlock {
     @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+        return layer == BlockRenderLayer.CUTOUT || layer == GlowLayer.get();
     }
 
     @Override

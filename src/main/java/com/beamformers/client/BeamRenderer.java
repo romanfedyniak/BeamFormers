@@ -45,7 +45,7 @@ public final class BeamRenderer {
 
     private BeamRenderer() {}
 
-    private static boolean bloomPresent() {
+    static boolean bloomPresent() {
         try {
             return Class.forName("gregtech.client.utils.IBloomEffect").isInterface();
         } catch (ClassNotFoundException | LinkageError e) {

@@ -15,6 +15,7 @@ import appeng.client.render.model.AutoRotatingModel;
 import com.beamformers.BeamFormersBlocks;
 import com.beamformers.BeamFormersItems;
 import com.beamformers.client.BeamRenderer;
+import com.beamformers.client.GlowSplitModel;
 
 public class ClientProxy extends CommonProxy {
 
@@ -31,14 +32,14 @@ public class ClientProxy extends CommonProxy {
                 new ModelResourceLocation(item.getRegistryName(), "inventory")));
     }
 
-    /** A block model is drawn turned the way its tile faces. */
+    /** A block model is drawn turned the way its tile faces, with its pink lights in the glow layer. */
     @SubscribeEvent
     public void onBakeModels(ModelBakeEvent event) {
         for (Block block : BeamFormersBlocks.BLOCKS) {
             final ModelResourceLocation location = new ModelResourceLocation(block.getRegistryName(), "normal");
             final IBakedModel model = event.getModelRegistry().getObject(location);
             if (model != null) {
-                event.getModelRegistry().putObject(location, new AutoRotatingModel(model));
+                event.getModelRegistry().putObject(location, new GlowSplitModel(new AutoRotatingModel(model)));
             }
         }
     }

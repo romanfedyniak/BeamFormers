@@ -27,7 +27,8 @@ All notable ME Beam Formers changes are grouped by the version in which they fir
   [Lumenized](https://www.curseforge.com/minecraft/mc-mods/lumenized), which carries GregTech's bloom on its
   own, installed, the beams are drawn through that bloom and shine around their edges. Under an OptiFine shader
   pack, where that bloom is switched off, and without either mod, they are drawn as before. A black beam never
-  glows: it is drawn as a dark shade over what is behind it. Drawing beams through GregTech's bloom follows
+  glows: it is drawn as a dark shade over what is behind it. The pink lights on the Dense Beam Former and the
+  Beam Tower glow through that bloom too. Drawing beams through GregTech's bloom follows
   [NAE2](https://github.com/AE2-UEL/NAE2).
 - **The Dense Beam Former.** A block that mounts on whatever it is placed against, with the beam pointing away
   from it, and joins the network only through that base. Two of them link at 32 channels; with a Small Beam
