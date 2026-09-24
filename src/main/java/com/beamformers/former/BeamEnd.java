@@ -10,6 +10,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -20,6 +21,7 @@ import appeng.api.AEApi;
 import appeng.api.exceptions.FailedConnectionException;
 import appeng.api.networking.IGridConnection;
 import appeng.api.networking.IGridNode;
+import appeng.api.networking.pathing.ChannelTiers;
 import appeng.api.parts.IPart;
 import appeng.api.parts.IPartHost;
 import appeng.api.util.AEColor;
@@ -44,6 +46,8 @@ public final class BeamEnd implements IBeamSource, PathWatcher.Watcher {
     private IGridConnection connection;
     private boolean owner;
     private int blocksBetween;
+    @Nullable
+    private BlockPos blocker;
     private AEColor color = AEColor.TRANSPARENT;
     private boolean hidden;
 
@@ -76,6 +80,23 @@ public final class BeamEnd implements IBeamSource, PathWatcher.Watcher {
         return this.hidden;
     }
 
+    /** Server side: the block that stopped the last look along the facing, if one did. */
+    @Nullable
+    public BlockPos getBlocker() {
+        return this.blocker;
+    }
+
+    /** The channels a link from this end can carry: the narrower of the two ends. */
+    public int getCapacity() {
+        return this.partner == null ? capacityOf(this) : Math.min(capacityOf(this), capacityOf(this.partner));
+    }
+
+    private static int capacityOf(BeamEnd end) {
+        final IGridNode node = end.former.getFormerNode();
+        final ResourceLocation tier = node == null ? null : node.getGridBlock().getChannelTier();
+        return ChannelTiers.capacityOf(tier == null ? ChannelTiers.NORMAL : tier);
+    }
+
     /** Looks along the facing, then joins, keeps or drops the former found there. Server side, on a grid tick. */
     public void update() {
         final IGridNode node = this.former.getFormerNode();
@@ -88,6 +109,7 @@ public final class BeamEnd implements IBeamSource, PathWatcher.Watcher {
         final List<BlockPos> watched = new ArrayList<>();
         ChunkPos unloaded = null;
         BeamEnd found = null;
+        BlockPos blocker = null;
 
         BlockPos pos = this.former.getFormerPos();
         for (int i = 0; i < BeamFormersConfig.formerRange; i++) {
@@ -98,10 +120,15 @@ public final class BeamEnd implements IBeamSource, PathWatcher.Watcher {
             }
             watched.add(pos);
             found = at(world, pos, facing.getOpposite());
-            if (found != null || blocks(world, pos)) {
+            if (found != null) {
+                break;
+            }
+            if (blocks(world, pos)) {
+                blocker = pos;
                 break;
             }
         }
+        this.blocker = blocker;
         PathWatcher.INSTANCE.watch(this, world, watched, this.former.getColorSource(),
                 unloaded == null ? Collections.emptyList() : Collections.singletonList(unloaded));
 

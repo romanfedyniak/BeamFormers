@@ -100,8 +100,8 @@ public class TileBeamTower extends TileMounted implements IBeamSource, PathWatch
             }
 
             final IGridNode otherNode = other.getReadyNode();
-            if (otherNode == null || !clear(this.world, this.crystal(), other.crystal(), this.pos, target, watched, unloaded)
-                    || !this.getMountedColor().matches(other.getMountedColor())) {
+            link.blocker = blocker(this.world, this.crystal(), other.crystal(), this.pos, target, watched, unloaded);
+            if (otherNode == null || link.blocker != null || !this.getMountedColor().matches(other.getMountedColor())) {
                 changed |= this.drop(link, other);
                 continue;
             }
@@ -180,7 +180,8 @@ public class TileBeamTower extends TileMounted implements IBeamSource, PathWatch
     }
 
     // Walks every block the line crosses but the two towers', collecting them to be watched.
-    private static boolean clear(World world, Vec3d from, Vec3d to, BlockPos a, BlockPos b, Set<BlockPos> watched,
+    @Nullable
+    private static BlockPos blocker(World world, Vec3d from, Vec3d to, BlockPos a, BlockPos b, Set<BlockPos> watched,
             Set<ChunkPos> unloaded) {
         final Vec3d d = to.subtract(from);
         int x = MathHelper.floor(from.x);
@@ -199,16 +200,16 @@ public class TileBeamTower extends TileMounted implements IBeamSource, PathWatch
         for (int steps = 0; steps < 4 * (BeamFormersConfig.towerRange + 2); steps++) {
             final BlockPos p = new BlockPos(x, y, z);
             if (p.equals(b)) {
-                return true;
+                return null;
             }
             if (!p.equals(a)) {
                 if (!world.isBlockLoaded(p)) {
                     unloaded.add(new ChunkPos(p));
-                    return false;
+                    return p;
                 }
                 watched.add(p);
                 if (BeamEnd.blocks(world, p)) {
-                    return false;
+                    return p;
                 }
             }
             if (tx <= ty && tx <= tz) {
@@ -222,7 +223,7 @@ public class TileBeamTower extends TileMounted implements IBeamSource, PathWatch
                 tz += dz;
             }
         }
-        return false;
+        return b;
     }
 
     /** What a memory card keeps of this tower. */
@@ -394,12 +395,45 @@ public class TileBeamTower extends TileMounted implements IBeamSource, PathWatch
         out.addAll(this.clientBeams);
     }
 
+    public boolean isHidden() {
+        return this.hidden;
+    }
+
+    /** Server side: every link as the last look found it. */
+    public List<LinkState> getLinkStates() {
+        final List<LinkState> states = new ArrayList<>();
+        final IGridNode node = this.getProxy().getNode();
+        this.links.forEach((target, link) -> {
+            final boolean active = node != null && live(link, node);
+            states.add(new LinkState(target, active, active ? link.connection.getUsedChannels() : 0, link.blocker));
+        });
+        return states;
+    }
+
+    public static final class LinkState {
+
+        public final BlockPos target;
+        public final boolean active;
+        public final int usedChannels;
+        @Nullable
+        public final BlockPos blocker;
+
+        LinkState(BlockPos target, boolean active, int usedChannels, @Nullable BlockPos blocker) {
+            this.target = target;
+            this.active = active;
+            this.usedChannels = usedChannels;
+            this.blocker = blocker;
+        }
+    }
+
     private static final class Link {
 
         @Nullable
         IGridConnection connection;
         boolean owner;
         AEColor color = AEColor.TRANSPARENT;
+        @Nullable
+        BlockPos blocker;
     }
 
 }

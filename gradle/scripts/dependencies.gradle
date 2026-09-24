@@ -52,6 +52,7 @@ dependencies {
 
     implementation rfg.deobf('com.github.romanfedyniak:AE2UD:8f8e4525b6')
     runtimeOnly 'mezz:jei:4.34.0'
+    implementation rfg.deobf('curse.maven:top-245211:2667280') // 1.4.28
     // GTCEu's bloom, on its own; the beams glow through it when it is installed
     implementation rfg.deobf('curse.maven:lumenized-1234162:6734060') // 1.0.4
     runtimeOnly rfg.deobf('curse.maven:codechickenlib-242818:2779848') // 3.2.3.358, which Lumenized's bloom calls

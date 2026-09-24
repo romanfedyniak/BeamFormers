@@ -2,11 +2,9 @@ package com.beamformers.former;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 
 import appeng.api.networking.IGridConnection;
 import appeng.api.networking.IGridNode;
-import appeng.api.networking.pathing.ChannelTiers;
 import appeng.api.networking.visualiser.INetworkVisualiserProvider;
 import appeng.api.networking.visualiser.IVisualiserSink;
 import appeng.api.parts.IPart;
@@ -47,14 +45,7 @@ public final class BeamVisualiser implements INetworkVisualiserProvider {
                 || end.getFormer() instanceof TileEntity && partner.getFormer() instanceof TileEntity) {
             return;
         }
-        final int capacity = Math.min(capacityOf(end), capacityOf(partner));
-        sink.link(partner.getFormer().getFormerPos(), connection.getUsedChannels(), capacity, null);
-    }
-
-    private static int capacityOf(BeamEnd end) {
-        final IGridNode node = end.getFormer().getFormerNode();
-        final ResourceLocation tier = node == null ? null : node.getGridBlock().getChannelTier();
-        return ChannelTiers.capacityOf(tier == null ? ChannelTiers.NORMAL : tier);
+        sink.link(partner.getFormer().getFormerPos(), connection.getUsedChannels(), end.getCapacity(), null);
     }
 
 }
