@@ -1,6 +1,7 @@
 package com.beamformers.client;
 
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import org.lwjgl.opengl.GL11;
 
@@ -37,6 +38,9 @@ public final class BeamRenderer {
     /** How far each end of a beam reaches into its former, so no gap shows at the tip. */
     private static final double SUNK = 1 / 32d;
 
+    /** Light can only brighten what is behind it, so a black beam is drawn as a dark shade instead, never bloomed. */
+    static final Predicate<AEColor> BLOOMED = color -> color != AEColor.BLACK;
+
     private final boolean bloom = bloomPresent();
 
     private BeamRenderer() {}
@@ -58,10 +62,11 @@ public final class BeamRenderer {
 
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
+        Predicate<AEColor> which = color -> true;
         if (this.bloom) {
             BloomBeams.register();
             if (BloomBeams.takeDrawn()) {
-                return;
+                which = BLOOMED.negate();
             }
         }
         if (BeamRegistry.drawn().isEmpty()) {
@@ -73,34 +78,42 @@ public final class BeamRenderer {
         }
         final float pt = event.getPartialTicks();
 
+        final double cx = view.lastTickPosX + (view.posX - view.lastTickPosX) * pt;
+        final double cy = view.lastTickPosY + (view.posY - view.lastTickPosY) * pt;
+        final double cz = view.lastTickPosZ + (view.posZ - view.lastTickPosZ) * pt;
+
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
         GlStateManager.disableCull();
+        GlStateManager.enableDepth();
+        GlStateManager.depthFunc(GL11.GL_LEQUAL);
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
         GlStateManager.depthMask(false);
         final float lastX = OpenGlHelper.lastBrightnessX;
         final float lastY = OpenGlHelper.lastBrightnessY;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
 
-        final Tessellator tessellator = Tessellator.getInstance();
-        final BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        addBeams(buffer, view.lastTickPosX + (view.posX - view.lastTickPosX) * pt,
-                view.lastTickPosY + (view.posY - view.lastTickPosY) * pt,
-                view.lastTickPosZ + (view.posZ - view.lastTickPosZ) * pt);
-        tessellator.draw();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        draw(cx, cy, cz, which.and(BLOOMED));
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        draw(cx, cy, cz, which.and(BLOOMED.negate()));
 
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastX, lastY);
         GlStateManager.depthMask(true);
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.disableBlend();
         GlStateManager.enableCull();
         GlStateManager.enableTexture2D();
     }
 
-    /** Adds every visible beam to a buffer of coloured quads, relative to the camera. */
-    static void addBeams(BufferBuilder buffer, double cx, double cy, double cz) {
+    private static void draw(double cx, double cy, double cz, Predicate<AEColor> which) {
+        final Tessellator tessellator = Tessellator.getInstance();
+        tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        addBeams(tessellator.getBuffer(), cx, cy, cz, which);
+        tessellator.draw();
+    }
+
+    /** Adds every visible beam of the given colours to a buffer of coloured quads, relative to the camera. */
+    static void addBeams(BufferBuilder buffer, double cx, double cy, double cz, Predicate<AEColor> which) {
         final Minecraft mc = Minecraft.getMinecraft();
         final Frustum frustum = new Frustum();
         frustum.setPosition(cx, cy, cz);
@@ -111,15 +124,19 @@ public final class BeamRenderer {
                 it.remove();
                 continue;
             }
+            final AEColor color = end.getClientColor();
+            if (!which.test(color)) {
+                continue;
+            }
             final AxisAlignedBB core = beamBox(former, end.getClientLength(), former.getBeamRadius());
             if (!frustum.isBoundingBoxInFrustum(core.grow(0.5))) {
                 continue;
             }
-            final AEColor color = end.getClientColor();
             final EnumFacing.Axis axis = former.getFacing().getAxis();
-            sides(buffer, core.offset(-cx, -cy, -cz), axis, color.whiteVariant, 0.9f);
+            final boolean dark = !BLOOMED.test(color);
+            sides(buffer, core.offset(-cx, -cy, -cz), axis, dark ? color.mediumVariant : color.whiteVariant, 0.9f);
             sides(buffer, beamBox(former, end.getClientLength(), former.getGlowRadius()).offset(-cx, -cy, -cz),
-                    axis, color.mediumVariant, 0.3f);
+                    axis, dark ? color.blackVariant : color.mediumVariant, 0.3f);
         }
     }
 

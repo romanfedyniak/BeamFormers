@@ -54,7 +54,7 @@ final class BloomBeams implements IBloomEffect, IRenderSetup {
 
     @Override
     public void renderBloomEffect(@Nonnull BufferBuilder buffer, @Nonnull EffectRenderContext context) {
-        BeamRenderer.addBeams(buffer, context.cameraX(), context.cameraY(), context.cameraZ());
+        BeamRenderer.addBeams(buffer, context.cameraX(), context.cameraY(), context.cameraZ(), BeamRenderer.BLOOMED);
         this.drewThisFrame = true;
     }
 
