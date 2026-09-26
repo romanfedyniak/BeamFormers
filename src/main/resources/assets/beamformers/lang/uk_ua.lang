@@ -1,9 +1,9 @@
 itemGroup.beamformers=ME Beam Formers
-item.beamformers.small_beam_former.name=МЕ малий формувач променя
+item.beamformers.small_beam_former.name=МЕ Малий формувач променя
 chat.beamformers.beam_hidden=Промінь сховано
 chat.beamformers.beam_shown=Промінь показано
-tile.beamformers.dense_beam_former.name=МЕ щільний формувач променя
-tile.beamformers.beam_tower.name=МЕ променева вежа
+tile.beamformers.dense_beam_former.name=МЕ Щільний формувач променя
+tile.beamformers.beam_tower.name=МЕ Променева вежа
 chat.beamformers.tower_stored=Вежу записано на картку пам'яті
 chat.beamformers.tower_linked=Вежі з'єднано
 chat.beamformers.tower_unlinked=Вежі роз'єднано
