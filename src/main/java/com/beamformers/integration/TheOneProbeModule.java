@@ -96,6 +96,9 @@ public final class TheOneProbeModule implements Function<ITheOneProbe, Void>, IP
         info.text(TextStyleClass.INFO + key("top.beamformers.links") + " " + TextStyleClass.OK + links.size()
                 + TextStyleClass.INFO + " / " + TextStyleClass.OK + max + TextStyleClass.INFO + ", "
                 + key("top.beamformers.active") + " " + TextStyleClass.OK + active);
+        if (active > 0) {
+            channels(info, tower.getUsedChannels(), -1);
+        }
         if (mode == ProbeMode.EXTENDED) {
             for (TileBeamTower.LinkState link : links) {
                 if (link.active) {

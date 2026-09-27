@@ -31,6 +31,7 @@ import appeng.api.exceptions.FailedConnectionException;
 import appeng.api.networking.IGridConnection;
 import appeng.api.networking.IGridNode;
 import appeng.api.util.AEColor;
+import appeng.me.GridNode;
 
 import com.beamformers.BeamFormers;
 import com.beamformers.BeamFormersConfig;
@@ -397,6 +398,14 @@ public class TileBeamTower extends TileMounted implements IBeamSource, PathWatch
 
     public boolean isHidden() {
         return this.hidden;
+    }
+
+    /**
+     * Server side: the channels running through the tower, each counted once, however many of its links it came
+     * in and went out by.
+     */
+    public int getUsedChannels() {
+        return this.getProxy().getNode() instanceof GridNode node ? node.usedChannels() : 0;
     }
 
     /** Server side: every link as the last look found it. */

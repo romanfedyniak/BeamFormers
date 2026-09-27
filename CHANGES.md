@@ -47,5 +47,6 @@ All notable ME Beam Formers changes are grouped by the version in which they fir
 - **The One Probe.** With [The One Probe](https://www.curseforge.com/minecraft/mc-mods/the-one-probe) installed,
   looking at a beam former shows the former it is linked to and how far away, the channels the link carries,
   the block in the way when something blocks the beam, and whether the beam is hidden. A tower shows how many
-  links it has and how many are active; in the probe's extended mode it lists every link with its channels, or
-  the block in its way.
+  links it has, how many are active and the channels running through it, each counted once however many links
+  it comes in and goes out by; in the probe's extended mode it lists every link with its channels, or the block
+  in its way.
