@@ -10,6 +10,8 @@ All notable ME Beam Formers changes are grouped by the version in which they fir
 
 ## Unreleased
 
+- **Requires AE2UD 1.6.0 or newer.** AE2UD shares its mod id with AE2 and AE2 UEL, so the version range is
+  what keeps the game from starting with either of them in its place.
 - **The Small Beam Former.** A part for a cable bus that joins its network to another beam former facing it
   along the same line, up to 32 blocks away (`formerRange` in the config), with a visible beam between the
   two. The link carries a normal cable's 8 channels and the former draws 0.5 AE/t. The beam goes through
