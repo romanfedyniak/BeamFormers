@@ -1,6 +1,7 @@
 package com.beamformers.client;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.lwjgl.opengl.GL11;
 
@@ -26,17 +27,28 @@ final class BloomBeams implements IBloomEffect, IRenderSetup {
 
     private static final BloomBeams INSTANCE = new BloomBeams();
 
-    private boolean registered;
+    @Nullable
+    private BloomEffectUtil.BloomRenderTicket ticket;
     private boolean drewThisFrame;
     private float lastBrightnessX;
     private float lastBrightnessY;
 
     private BloomBeams() {}
 
-    /** Asks for a place in the bloom pass until one is given; none is while an OptiFine shader pack is on. */
+    /**
+     * Holds a place in the bloom pass only while there are beams to draw; none is given while an OptiFine shader
+     * pack is on. A place in it costs a blur over the whole screen every frame, beams or not.
+     */
     static void register() {
-        if (!INSTANCE.registered) {
-            INSTANCE.registered = BloomEffectUtil.registerBloomRender(INSTANCE, BloomType.UNITY, INSTANCE, null) != null;
+        final boolean beams = !BeamRegistry.drawn().isEmpty();
+        final BloomEffectUtil.BloomRenderTicket held = INSTANCE.ticket;
+        if (held != null && held.isValid()) {
+            if (!beams) {
+                held.invalidate();
+                INSTANCE.ticket = null;
+            }
+        } else if (beams) {
+            INSTANCE.ticket = BloomEffectUtil.registerBloomRender(INSTANCE, BloomType.UNITY, INSTANCE, null);
         }
     }
 
